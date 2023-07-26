@@ -1,23 +1,50 @@
 package meal;
 
-import javax.swing.*;
+import meal.enums.Sizes;
 
-public class Drink {
-    DrinkTypes type;
-    Sizes size;
-    Double price;
+import java.util.Objects;
 
-    public Drink(DrinkTypes type, Sizes size) {
+public class Item {
+
+    private String type;
+    private String name;
+    private Double price;
+    private Sizes size = Sizes.MEDIUM;
+
+    public Item(String type, String name, Double price) {
         this.type = type;
-        this.size = size;
-        if(size == Sizes.SMALL) {
-            this.price = 10.00;
-        } else if (size == Sizes.MEDIUM) {
-            this.price = 15.20;
-        } else {
-            this.price = 19.80;
-        }
+        this.name = name;
+        this.price = price;
     }
 
+    public String getName() {
+        if(type.equals("DRINK".toLowerCase()) || type.equals("SIDE".toLowerCase())) {
+            return size + " " + name.toUpperCase();
+        }
+        return name.toUpperCase();
+    }
 
+    public Double getBasePrice() {
+        return price;
+    }
+
+    public Double getAdjustedPrice() {
+        return switch (size) {
+            case SMALL -> getBasePrice() - 0.5;
+            case LARGE -> getBasePrice() + 1.00;
+            default -> getBasePrice();
+        };
+    }
+
+    public void setSize(Sizes size) {
+        this.size = size;
+    }
+
+    public static void printItem(String name, double price) {
+        System.out.printf("%20s:%6.2f%n", name, price);
+    }
+
+    public void printItem() {
+        printItem(getName(), getAdjustedPrice());
+    }
 }
